@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Punjabi Proverbs Translation</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='mm.css') }}" />
+ 
+</head>
+<body>
+  <div class="topheader">
+    <div class="container">
+      <div class="header">
+        <div class="textlocation">
+          <h1>ਪੰਜਾਬ VERSE</h1>
+        </div>
+        <div class="image-container"></div>
+      </div>
+
+      <div class="contentrow">
+        <section class="idiom-translation">
+          <form method="POST" autocomplete="off" id="searchForm">
+            <label for="punjabi-idiom">Enter Punjabi Muhavra (Idiom):</label>
+            <div class="search-wrapper">
+              <input
+                type="text"
+                id="searchBox"
+                name="query"
+                placeholder="Enter a keyword"
+                value="{{ keyword }}"
+                required
+              />
+              <span id="clearInputBtn" class="clear-btn">&times;</span>
+              <ul id="suggestions"></ul>
+            </div>
+            <input type="hidden" name="selected" id="selectedValue" value="false" />
+            <button type="submit">Search</button>
+            <button type="button" onclick="clearSearch()">Clear</button>
+          </form>
+        </section>
+
+        <div class="result">
+          {% if results %}
+            {% for row in results %}
+              <h4>ਪੰਜਾਬੀ: {{ row[0] }}</h4>
+              <h4>Romanized Punjabi: {{row[1]}}</h4 >
+              <h2>Meaning:</h2>
+              <p>{{ row[2] }}</p>
+              {% if row[3] and row[3]|length > 0 %}
+                <h2>Equivalent English Idiom:</h2>
+                <p>{{ row[3] }}</p>
+              {% endif %}
+            {% endfor %}
+            {% elif message %}
+            <p style="color: rgb(197, 21, 21);">{{ message }}</p>
+        {% endif %}
+        
+        </div>
+      </div>
+      <section class="about">
+        <div class="about-content">
+            <img src="static/b.jpeg" alt="working">
+            <div class="text">
+                <h6>About Us...</h6>
+                <p>Proverbs encapsulate cultural wisdom and linguistic heritage, often losing their essence in 
+direct translations. This website aims to convey the contextual meaning of Punjabi proverbs 
+in English accurately. The website can be useful for language learner as well as researcher Additionally, language accuracy and interface 
+functionality will be prioritized through a combination of accurate translations, making it 
+valuable for students, researchers, translators, and language enthusiasts.</p>
+            </div>
+        </div>
+    </section>
+    <section class="section">
+      <h6>Why our website</h6>
+      <div class="grid">
+        <div class="card blue">
+          <h3>Greater Consistency</h3>
+          <p>Website translate punjabi proverb into their most accurate English contextual meaning rather than literal translation.</p>
+        </div>
+        <div class="card yellow">
+          <h3>English Equivalent</h3>
+          <p>Our website provides most accurate english equivalent of punjabi proverb if possible.</p>
+        </div>
+        <div class="card green">
+          <h3>Efficient Input</h3>
+          <p>In our website user can search with gurmukhi as well as romanized punjabi.</p>
+        </div>
+        <div class="card orange">
+          <h3>Keyword Searching</h3>
+          <p>Our website provides partial searching with most accurate matched proverbs.</p>
+        </div>
+        <div class="card purple">
+          <h3>Responsive</h3>
+          <p>Our website is responsive on phone as well as desktop.</p>
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <h6>How our website works</h6>
+      <p class="subtitle">Punjab verse help you to break down the cultural barrier and help you to understand punjabi cultural and proverbs.</p>
+    <div class="box box1">
+      <div class="number"> STEP 1</div>
+      <div class="content">
+        
+        <p>Enter punjabi proverb in romanized or gurmukhi in search bar.</p>
+      </div>
+    </div>
+    <div class="box box2">
+      <div class="number"> STEP 2</div>
+      <div class="content">
+        
+        <p>While entering proverb in search bar, it will provides you drop-down of matched proverbs.</p>
+      </div>
+    </div>
+    <div class="box box3">
+      <div class="number"> STEP 3</div>
+      <div class="content">
+       
+        <p>Click on search button.</p>
+        </div>
+    </div>
+    <div class="box box4">
+      <div class="number"> STEP 4</div>
+      <div class="content">
+        
+        <p>Clear button help to clear old search output while cross help you to clear input from search bar.</p>  
+      </div>
+    </div>
+    <div class="box box5">
+      <div class="number"> STEP 5</div>
+      <div class="content">
+        
+        <p>The search button provides output on the same page or error message based on input.</p>
+      </div>
+    </div>
+  </section>
+
+    <footer class="footer">
+      <div class="footer-content">
+          <h5>Contact Us</h5>
+          <div class="footer-info">
+              <div class="info-item">
+                  
+                  <p>Guru Nanak Dev Engineering College, Gill Park, Ludhiana</p>
+              </div>
+              
+              <div class="info-item">
+                  
+                  <p>abc@gmail.com</p>
+              </div>
+              <div class="info-item">
+                  
+                  <p>www.website.com</p>
+              </div>
+          </div>
+      </div>
+  </footer>
+    </div>
+  </div>
+
+  <script>
+    const input = document.getElementById("searchBox");
+    const suggestionsList = document.getElementById("suggestions");
+    const selectedField = document.getElementById("selectedValue");
+    const clearInputBtn = document.getElementById("clearInputBtn");
+
+    input.addEventListener("input", () => {
+      selectedField.value = "false";
+      clearInputBtn.style.display = input.value ? "block" : "none";
+
+      const query = input.value;
+      if (query.length < 1) {
+        suggestionsList.innerHTML = "";
+        return;
+      }
+
+      fetch(`/suggest?q=${encodeURIComponent(query)}`)
+        .then((response) => response.json())
+        .then((data) => {
+          suggestionsList.innerHTML = "";
+          data.forEach((item) => {
+            const li = document.createElement("li");
+            li.textContent = item;
+            li.addEventListener("click", () => {
+              input.value = item;
+              selectedField.value = "true";
+              suggestionsList.innerHTML = "";
+              clearInputBtn.style.display = "block";
+            });
+            suggestionsList.appendChild(li);
+          });
+        });
+    });
+
+    clearInputBtn.addEventListener("click", () => {
+      input.value = "";
+      suggestionsList.innerHTML = "";
+      selectedField.value = "false";
+      clearInputBtn.style.display = "none";
+    });
+
+    function clearSearch() {
+      document.querySelector(".result").innerHTML = "";
+    }
+    // Close suggestion dropdown when clicking outside
+document.addEventListener('click', function(event) {
+    const isClickInsideInput = input.contains(event.target);
+    const isClickInsideSuggestions = suggestionsList.contains(event.target);
+
+    if (!isClickInsideInput && !isClickInsideSuggestions) {
+        suggestionsList.innerHTML = '';
+    }
+});
+
+  </script>
+</body>
+</html>
