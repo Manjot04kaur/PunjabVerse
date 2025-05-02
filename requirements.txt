@@ -1,5 +1,5 @@
-﻿absl-py==2.1.0
-alembic==1.15.2
+absl-py==2.1.0
+alembic==1.10.0  # Downgraded to avoid conflict with typing-extensions
 asttokens==3.0.0
 astunparse==1.6.3
 attrs==24.2.0
@@ -82,11 +82,10 @@ sounddevice==0.5.1
 SQLAlchemy==2.0.40
 stack-data==0.6.3
 sympy==1.13.1
-tensorboard
+tensorboard==2.18.0
 tensorboard-data-server==0.7.2
-tensorflow==2.13.0
+tensorflow==2.14.0  # Updated to support higher typing-extensions
 tensorflow-io-gcs-filesystem==0.31.0
-tensorflow==2.13.0
 termcolor==2.5.0
 tf_keras==2.18.0
 threadpoolctl==3.5.0
@@ -97,7 +96,7 @@ torchvision==0.20.1
 tqdm==4.67.1
 traitlets==5.14.3
 transformers==4.46.3
-typing_extensions
+typing-extensions==4.6.0  # Set specific version to avoid conflict
 tzdata==2024.2
 unicode==2.9
 Unidecode==1.3.8
