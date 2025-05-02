@@ -82,7 +82,7 @@ sounddevice==0.5.1
 SQLAlchemy==2.0.40
 stack-data==0.6.3
 sympy==1.13.1
-tensorboard==2.18.0
+tensorboard
 tensorboard-data-server==0.7.2
 tensorflow==2.13.0
 tensorflow-io-gcs-filesystem==0.31.0
